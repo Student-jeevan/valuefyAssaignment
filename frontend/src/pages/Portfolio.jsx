@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { portfolioApi, clientApi } from '../api';
-import { PortfolioResponse, Client } from '../types';
 
-const Portfolio: React.FC = () => {
-  const { clientId } = useParams<{ clientId: string }>();
-  const [portfolio, setPortfolio] = useState<PortfolioResponse | null>(null);
-  const [client, setClient] = useState<Client | null>(null);
+const Portfolio = () => {
+  const { clientId } = useParams();
+  const [portfolio, setPortfolio] = useState(null);
+  const [client, setClient] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     if (!clientId) return;
@@ -42,7 +41,7 @@ const Portfolio: React.FC = () => {
         <div className="text-right">
           <div className="text-secondary" style={{ fontSize: '0.875rem' }}>Total Portfolio Value</div>
           <div style={{ fontSize: '2rem', fontWeight: 'bold', color: 'var(--primary)' }}>
-            ${portfolio.portfolioValue.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+            ₹{portfolio.portfolioValue.toLocaleString(undefined, { minimumFractionDigits: 2 })}
           </div>
         </div>
       </div>
@@ -79,7 +78,7 @@ const Portfolio: React.FC = () => {
                     <span className="badge badge-warning">Non-Model</span>
                   )}
                 </td>
-                <td className="text-right">${item.currentValue.toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
+                <td className="text-right">₹{item.currentValue.toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
                 <td className="text-right">{item.currentPct.toFixed(2)}%</td>
                 <td className="text-right">
                   {item.targetPct !== null ? `${item.targetPct.toFixed(2)}%` : '--'}

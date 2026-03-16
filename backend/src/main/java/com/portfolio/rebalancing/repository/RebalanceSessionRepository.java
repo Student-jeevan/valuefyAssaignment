@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface RebalanceSessionRepository extends JpaRepository<RebalanceSession, Long> {
 
-    List<RebalanceSession> findByClientIdOrderBySessionIdDesc(String clientId);
+    List<RebalanceSession> findByClientIdOrderByCreatedAtDesc(String clientId);
 }
 

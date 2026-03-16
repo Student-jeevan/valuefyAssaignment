@@ -60,16 +60,22 @@ public class RebalanceService {
                     .divide(BigDecimal.valueOf(100), CURRENCY_SCALE, RoundingMode.HALF_UP);
 
             String action;
+            BigDecimal displayAmount;
+
             if (!item.isModelFund()) {
                 action = "REVIEW";
+                displayAmount = BigDecimal.ZERO;
             } else if (amount.compareTo(BigDecimal.ZERO) > 0) {
                 action = "BUY";
                 totalToBuy = totalToBuy.add(amount);
+                displayAmount = amount;
             } else if (amount.compareTo(BigDecimal.ZERO) < 0) {
                 action = "SELL";
                 totalToSell = totalToSell.add(amount.abs());
+                displayAmount = amount.abs();
             } else {
                 action = "HOLD";
+                displayAmount = BigDecimal.ZERO;
             }
 
             // Post rebalance % should ideally be the target % (if we execute fully)
@@ -82,7 +88,7 @@ public class RebalanceService {
                     targetPct.setScale(PCT_SCALE, RoundingMode.HALF_UP),
                     drift.setScale(PCT_SCALE, RoundingMode.HALF_UP),
                     action,
-                    amount.abs(), // Recommendation UI usually shows absolute magnitude
+                    displayAmount.setScale(CURRENCY_SCALE, RoundingMode.HALF_UP),
                     postRebalancePct.setScale(PCT_SCALE, RoundingMode.HALF_UP),
                     item.isModelFund()
             ));
@@ -114,7 +120,7 @@ public class RebalanceService {
         session.setTotalToBuy(rebalance.totalToBuy().doubleValue());
         session.setTotalToSell(rebalance.totalToSell().doubleValue());
         session.setNetCashNeeded(rebalance.netCashNeeded().doubleValue());
-        session.setStatus("COMPLETED");
+        session.setStatus("APPLIED");
 
         session = sessionRepository.save(session);
 

@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { clientApi } from '../api';
-import { Client } from '../types';
 
-const Dashboard: React.FC = () => {
-  const [clients, setClients] = useState<Client[]>([]);
+const Dashboard = () => {
+  const [clients, setClients] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     clientApi.getAll()
@@ -47,7 +46,7 @@ const Dashboard: React.FC = () => {
                 <td><strong>{client.clientName}</strong></td>
                 <td>{client.clientId}</td>
                 <td className="text-right">
-                  ${client.totalInvested?.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                  ₹{client.totalInvested?.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                 </td>
                 <td className="text-center">
                   <div className="flex gap-2 justify-center">
